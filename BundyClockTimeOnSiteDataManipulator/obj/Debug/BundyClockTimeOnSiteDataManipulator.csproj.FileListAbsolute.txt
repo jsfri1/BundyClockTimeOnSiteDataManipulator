@@ -1,0 +1,6 @@
+C:\Users\josh.INRANGE\documents\visual studio 2015\Projects\ConsoleApplication5\ConsoleApplication5\bin\Debug\ConsoleApplication5.exe.config
+C:\Users\josh.INRANGE\documents\visual studio 2015\Projects\ConsoleApplication5\ConsoleApplication5\obj\Debug\ConsoleApplication5.exe
+C:\Users\josh.INRANGE\documents\visual studio 2015\Projects\ConsoleApplication5\ConsoleApplication5\obj\Debug\ConsoleApplication5.pdb
+C:\Users\josh.INRANGE\Documents\Visual Studio 2015\Projects\BundyClockTimeOnSiteDataManipulator\ConsoleApplication5\bin\Debug\ConsoleApplication5.exe.config
+C:\Users\josh.INRANGE\Documents\Visual Studio 2015\Projects\BundyClockTimeOnSiteDataManipulator\ConsoleApplication5\obj\Debug\ConsoleApplication5.exe
+C:\Users\josh.INRANGE\Documents\Visual Studio 2015\Projects\BundyClockTimeOnSiteDataManipulator\ConsoleApplication5\obj\Debug\ConsoleApplication5.pdb
