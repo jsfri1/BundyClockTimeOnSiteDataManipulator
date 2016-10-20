@@ -73,22 +73,6 @@ namespace ConsoleApplication5
             }
             return u;
         }
-        
-        //method removes OUT as first entry and IN as last entry
-        public void data_validator(List<user> U)
-        {
-            foreach(user value in U )
-            {
-                if(LoadedAccessEvents[LoadedAccessEvents.Count-1].direction == "In")
-                {
-                    LoadedAccessEvents.Remove(LoadedAccessEvents[LoadedAccessEvents.Count-1]);
-                }                
-                if(LoadedAccessEvents[0].direction == "Out")
-                {
-                    LoadedAccessEvents.Remove(LoadedAccessEvents[0]);
-                }
-            }            
-        }
     }
 
 
@@ -96,12 +80,10 @@ namespace ConsoleApplication5
     {
         static void Main(string[] args)
         {
-
-            try {
+            try
+            {
                 dataUtility datahandler = new dataUtility();
-
-                var reader = new StreamReader(File.OpenRead(@"C:\Reports\BundyClockReportOutput.csv"), Encoding.UTF8);
-                
+                var reader = new StreamReader(File.OpenRead(@"C:\Reports\BundyClockReportOutput.csv"), Encoding.UTF8);              
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
@@ -125,9 +107,7 @@ namespace ConsoleApplication5
 
                     datahandler.Usernames = datahandler.get_distinct_list_of_users(datahandler.LoadedAccessEvents);
                     datahandler.UserObjectList = datahandler.map_records_to_user_objects(datahandler.Usernames, datahandler.LoadedAccessEvents);
-                    datahandler.data_validator(datahandler.UserObjectList);
-                    
-
+                                      
                     using (StreamWriter file = new StreamWriter(@"C:\Reports\BundyClockReport.csv"))
                     {
                         file.WriteLine("ReferenceNumber" + "," + "Date" + "," + "Start" + "," + "End" + "," + "," + "," + "," + "," + "ManagerName" + "," + "LocationName" + ","  + "," + ",");
