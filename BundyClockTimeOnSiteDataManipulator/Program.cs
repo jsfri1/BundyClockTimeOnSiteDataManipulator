@@ -7,35 +7,35 @@ using System.IO;
 
 namespace TimeOnSiteDataManipulator
 {
-    class ReviewEntryData
+    internal class ReviewEntryData
     {
-        public string name { get; set;}
-        public string employeenumber { get; set; }
-        public DateTime accesstime { get; set; }
-        public string direction { get; set; }
-        public string jobreferencenumber { get; set; }
-        public string comments { get; set; }
-        public string location { get; set; }
+        public string Name { get; set;}
+        public string Employeenumber { get; set; }
+        public DateTime Accesstime { get; set; }
+        public string Direction { get; set; }
+        public string Jobreferencenumber { get; set; }
+        public string Comments { get; set; }
+        public string Location { get; set; }
     }
 
-    class user
+    internal class User
     {
       public List<ReviewEntryData> AccessEvents;
-      public string username;   
+      public string Username;   
 
-      public user()
+      public User()
         {
           AccessEvents = new List<ReviewEntryData>(); 
         }
     }
 
-    class dataUtility
+    internal class DataUtility
     {
         public List<ReviewEntryData> LoadedAccessEvents;
         public List<string> Usernames;
-        public List<user> UserObjectList;
+        public List<User> UserObjectList;
 
-        public dataUtility()
+        public DataUtility()
         {
             LoadedAccessEvents = new List<ReviewEntryData>();
         }
@@ -44,65 +44,62 @@ namespace TimeOnSiteDataManipulator
         public List<string> get_distinct_list_of_users(List<ReviewEntryData> T)
         {
             List<string> names = new List<string>();
-            foreach (ReviewEntryData value in T)
-            {
-                names.Add(value.name);
-            }
+            T.ForEach(i => names.Add(i.Name));           
             List<string> distinctnames = names.Distinct().ToList();
             return distinctnames;
         }
      
-        public List<user> map_records_to_user_objects(List<string> names, List<ReviewEntryData> T)
+        public List<User> map_records_to_user_objects(List<string> names, List<ReviewEntryData> T)
         {
-            List<user> u = new List<user>();
+            List<User> user = new List<User>();
             int numberofrecords = T.Count;
 
             foreach (string value in names)
             {
-                user _u = new user();
+                User u = new User();
                 for (int i = 0; i < numberofrecords; i++)
                 {
-                    if(T[i].name == value)
+                    if(T[i].Name == value)
                     {
-                        _u.username = T[i].name;
-                        _u.AccessEvents.Add(T[i]);                       
+                        u.Username = T[i].Name;
+                        u.AccessEvents.Add(T[i]);                       
                     }
                 }
-                u.Add(_u);
-                Console.WriteLine("{0} complete", _u.username);
+                user.Add(u);
+                Console.WriteLine("{0} complete", u.Username);
             }
-            return u;
+            return user;
         }
     }
 
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
-                dataUtility datahandler = new dataUtility();
+                var datahandler = new DataUtility();
                 var reader = new StreamReader(File.OpenRead(@"C:\Reports\BundyClockReportOutput.csv"), Encoding.UTF8);              
                     while (!reader.EndOfStream)
                     {
                         var line = reader.ReadLine();
                         var values = line.Split(',');
                         DateTime t;
-                        ReviewEntryData R = new ReviewEntryData();
-                        R.name = values[0].ToString();
-                        R.employeenumber = values[1].ToString();
+                        var r = new ReviewEntryData();
+                        r.Name = values[0].ToString();
+                        r.Employeenumber = values[1].ToString();
 
                         if (DateTime.TryParse(values[2], out t))
                         {
-                            R.accesstime = t;
+                            r.Accesstime = t;
                         }
 
-                        R.direction = values[3].ToString();
-                        R.jobreferencenumber = values[4].ToString();
-                        R.comments = values[5].ToString();
-                        R.location = values[6].ToString();
-                        datahandler.LoadedAccessEvents.Add(R);
+                        r.Direction = values[3].ToString();
+                        r.Jobreferencenumber = values[4].ToString();
+                        r.Comments = values[5].ToString();
+                        r.Location = values[6].ToString();
+                        datahandler.LoadedAccessEvents.Add(r);
                     }
 
                     datahandler.Usernames = datahandler.get_distinct_list_of_users(datahandler.LoadedAccessEvents);
@@ -111,32 +108,32 @@ namespace TimeOnSiteDataManipulator
                     using (StreamWriter file = new StreamWriter(@"C:\Reports\BundyClockReport.csv"))
                     {
                         file.WriteLine("ReferenceNumber" + "," + "Date" + "," + "Start" + "," + "End" + "," + "," + "," + "," + "," + "ManagerName" + "," + "LocationName" + ","  + "," + ",");
-                    foreach (user u in datahandler.UserObjectList)
+                    foreach (User u in datahandler.UserObjectList)
                         {
 
                             var offset = 0;
 
                             while (offset < u.AccessEvents.Count - 1)
                             {
-                                if (u.AccessEvents[offset].direction == "Out")
+                                if (u.AccessEvents[offset].Direction == "Out")
                                 {
                                     offset++;
                                 }
                                 else
                                 {
                                     string timeout = null;
-                                    var name = u.AccessEvents[offset].name;
-                                    var employeenumber = u.AccessEvents[offset].employeenumber;
-                                    var datein = u.AccessEvents[offset].accesstime.ToShortDateString();
-                                    var timein = u.AccessEvents[offset].accesstime.ToString("HH:mm");
-                                    var jobreference = u.AccessEvents[offset].jobreferencenumber;
-                                    var comments = u.AccessEvents[offset].comments;
-                                    var position = u.AccessEvents[offset].location;
+                                    var name = u.AccessEvents[offset].Name;
+                                    var employeenumber = u.AccessEvents[offset].Employeenumber;
+                                    var datein = u.AccessEvents[offset].Accesstime.ToShortDateString();
+                                    var timein = u.AccessEvents[offset].Accesstime.ToString("HH:mm");
+                                    var jobreference = u.AccessEvents[offset].Jobreferencenumber;
+                                    var comments = u.AccessEvents[offset].Comments;
+                                    var position = u.AccessEvents[offset].Location;
                                     offset++;
-                                    TimeSpan duration = u.AccessEvents[offset].accesstime - u.AccessEvents[offset - 1].accesstime;
-                                    if (u.AccessEvents[offset].direction != u.AccessEvents[offset - 1].direction || duration.TotalHours < 22)
+                                    TimeSpan duration = u.AccessEvents[offset].Accesstime - u.AccessEvents[offset - 1].Accesstime;
+                                    if (u.AccessEvents[offset].Direction != u.AccessEvents[offset - 1].Direction || duration.TotalHours < 22)
                                     {
-                                    timeout = u.AccessEvents[offset].accesstime.ToString("HH:mm");
+                                    timeout = u.AccessEvents[offset].Accesstime.ToString("HH:mm");
                                     offset++;
                                     }
 
